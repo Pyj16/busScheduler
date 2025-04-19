@@ -63,7 +63,7 @@ V terminalu:
 - maxBuses: Število. Maximalno število prikazanih linij
 - mode: Besedilo
   - "relative" ali "r": Relativni prikaz v minutah
-  - "absolute" ali "a": Absolutni prikaz v obliki in HH:mm:ss
+  - "absolute" ali "a": Absolutni prikaz v obliki HH:mm:ss
 
 
 ## Struktura projekta
