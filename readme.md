@@ -14,6 +14,27 @@ files for stops, stoptimes, routes and trips.
 relative or absolute.
 - Accounting for time overflow if application is run after 22:00:00.
 
+## Preconditions
+All data must be in a text file (.txt) in the "data" folder. The names of the files must be:
+- routes.txt
+- stop_times.txt
+- stops.txt
+- trips.txt
+
+## Execution
+In the command prompt:
+```
+..busScheduler/src>java Main [stopID] [maxBuses] [mode]
+```
+- stopId: Integer. ID of the bus stop
+- maxBuses: Integer. Maximum number of buses outputted
+- mode: String
+    - "relative" or "r": Relative representation in minutes
+    - "absolute" or "a": Absolute representation in HH:mm:ss
+
+
+
+
 # Avstobusni Urnik
 
 Preprost program ki prikazuje uporabniku naslednje avtobusne linije največ 2 ur
@@ -25,6 +46,25 @@ za postaje, čase prihoda ter linije.
 - Izbiranje ID postaje, maximalno število prikazanih avtobusov in relativen ali
 absoluten prikaz.
 - Preverjanje in pravilna pretvorba izračuna časa če program je zaženen kasneje od 22:00:00.
+
+## Predpogoje
+Podatki morajo biti v besedilni obliki (.txt) v "data" mapi. Imena datotek morajo biti:
+- routes.txt
+- stop_times.txt
+- stops.txt
+- trips.txt
+
+## Zagon
+V terminalu:
+```
+..busScheduler/src>java Main [stopID] [maxBuses] [mode]
+```
+- stopId: Število. ID avtobusne postaje
+- maxBuses: Število. Maximalno število prikazanih linij
+- mode: Besedilo
+  - "relative" ali "r": Relativni prikaz v minutah
+  - "absolute" ali "a": Absolutni prikaz v obliki in HH:mm:ss
+
 
 ## Struktura projekta
 
