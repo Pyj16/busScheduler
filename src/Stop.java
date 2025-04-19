@@ -2,6 +2,7 @@ public class Stop {
     int id;
     String code;
     String name;
+    // Redundant
     String description;
     int latitude;
     int longitude;
