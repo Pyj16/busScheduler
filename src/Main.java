@@ -28,7 +28,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        HashMap<Integer, BusStop> busStops = new HashMap<>();
+        HashMap<Integer, Stop> busStops = new HashMap<>();
         List<StopTime> stopTimes = new ArrayList<>();
         HashMap<String, Trip> trips = new HashMap<>();
         HashMap<Integer, Route> routes = new HashMap<>();
@@ -52,7 +52,7 @@ public class Main {
         List<StopTime> validTimes = new ArrayList<>();
 
 
-        BusStop stop = busStops.get(stopID);
+        Stop stop = busStops.get(stopID);
         for(StopTime stopTime : stopTimes){
             if(maxTime.isBefore(now))
             {
@@ -77,7 +77,7 @@ public class Main {
         }
     }
 
-    public static void readData(HashMap<Integer, BusStop> busStop, List<StopTime> stopTimes, HashMap<String, Trip> trips, HashMap<Integer, Route> routes) throws FileNotFoundException, ParseException {
+    public static void readData(HashMap<Integer, Stop> busStop, List<StopTime> stopTimes, HashMap<String, Trip> trips, HashMap<Integer, Route> routes) throws FileNotFoundException, ParseException {
         File stopsFile = new File("src/data/stops.txt");
         File stoptimesFile = new File("src/data/stop_times.txt");
         File tripsFile = new File("src/data/trips.txt");
@@ -94,7 +94,7 @@ public class Main {
             content = scan.nextLine();
             List<String> params = Arrays.asList(content.split(","));
             int id = Integer.parseInt(params.get(0));
-            BusStop newStop = new BusStop(id, params.get(1), params.get(2));
+            Stop newStop = new Stop(id, params.get(1), params.get(2));
             busStop.put(id, newStop);
         }
 
@@ -139,7 +139,7 @@ public class Main {
             Trip trip = trips.get(tripID);
 
             int stopID = Integer.parseInt(params.get(3));
-            BusStop stop = busStop.get(stopID);
+            Stop stop = busStop.get(stopID);
 
             DateFormat format = new SimpleDateFormat("HH:mm:ss");
 

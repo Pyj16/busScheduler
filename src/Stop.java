@@ -1,4 +1,4 @@
-public class BusStop {
+public class Stop {
     int id;
     String code;
     String name;
@@ -7,11 +7,11 @@ public class BusStop {
     int longitude;
     int zoneId;
     String url;
-    BusStop parentStation;
+    Stop parentStation;
     int timezone;
     boolean wheelchairBoarding;
 
-    public BusStop(int id, String code, String name) {
+    public Stop(int id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
