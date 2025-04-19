@@ -2,7 +2,8 @@ public class Stop {
     int id;
     String code;
     String name;
-    // Redundant
+
+    // Redundant variables below
     String description;
     int latitude;
     int longitude;

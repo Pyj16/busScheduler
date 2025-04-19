@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 
 public class StopTime {
-    String id;
+    String id; // id is the concatenation of trip_id and sequence
     Trip trip;
     LocalTime arrivalTime;
     LocalTime departureTime;

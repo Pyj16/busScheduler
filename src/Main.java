@@ -44,7 +44,7 @@ public class Main {
         showStops(stopID, maxBuses, 2, isRelative); // Shows relevant stop times
     }
 
-    // Reads data from set file paths and adds them to the HashMaps and Lists. Example data is in 'src/data'
+    // Reads data from set file paths and adds them to the HashMaps and Lists. Example data is in 'busScheduler/src/data'
     public static void readData() throws FileNotFoundException, ParseException {
         File stopsFile = new File("./data/stops.txt");
         File stoptimesFile = new File("./data/stop_times.txt");
@@ -127,6 +127,7 @@ public class Main {
         stopsOutput(stopID, maxBuses, isRelative, now, maxTime);
     }
 
+    // Takes in a stop_id, a maximum number of buses, a maximum amount of time in hours to show and checks if timings should be made relative or absolute.
     public static void showStops(int stopID, int maxBuses, int maxTimeInHrs, boolean isRelative){
         LocalTime now = LocalTime.now();
         LocalTime maxTime = now.plusHours(maxTimeInHrs);
@@ -137,11 +138,11 @@ public class Main {
     // Processes the relevant data and outputs it.
     public static void stopsOutput(int stopID, int maxBuses, boolean isRelative, LocalTime now, LocalTime maxTime){
 
-        // Local class for formatting the output
+        // Local class for formatting the output. Has route name and relevant times to the specified parameters
         class StopOutput{
             final String route;
             final List<String> times;
-            int offset = 0;
+            int offset = 0; // Offset for times that get added in between midnight
 
             StopOutput(String route){
                 this.route = route;
