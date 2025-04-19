@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
@@ -14,21 +12,20 @@ public class Main {
     public static HashMap<String, Trip> trips = new HashMap<>();
     public static HashMap<Integer, Route> routes = new HashMap<>();
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args){
         // Arguments: stopID, maxBuses, <relative/absolute>
         int stopID = 0;
         int maxBuses = 0;
         boolean isRelative = false;
 
+
         // Process args
         try{
-            stopID = Integer.getInteger(args[0]); // ID of the bus stop.
-            maxBuses = Integer.getInteger(args[1]); // Max number of buses to output.
+            stopID = Integer.parseInt(args[0]); // ID of the bus stop.
+            maxBuses = Integer.parseInt(args[1]); // Max number of buses to output.
             isRelative = switch (args[2]) {
-                case "relative" -> true;
-                case "r" -> true;
-                case "absolute" -> false;
-                case "a" -> false;
+                case "relative", "r" -> true;
+                case "absolute", "a" -> false;
                 default ->
                         throw new Exception("Unknown representation format '" + args[2] + "'. Please use 'relative' or 'absolute'.");
             }; // Relative or absolute timing representation. 1 = relative 0 = absolute
@@ -44,26 +41,21 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        maxBuses = 6; // DEL LATER
-        stopID = 3;
-        isRelative = true;
-
         showStops(stopID, maxBuses, 2, isRelative); // Shows relevant stop times
     }
 
     // Reads data from set file paths and adds them to the HashMaps and Lists. Example data is in 'src/data'
     public static void readData() throws FileNotFoundException, ParseException {
-        File stopsFile = new File("src/data/stops.txt");
-        File stoptimesFile = new File("src/data/stop_times.txt");
-        File tripsFile = new File("src/data/trips.txt");
-        File routesFile = new File("src/data/routes.txt");
+        File stopsFile = new File("./data/stops.txt");
+        File stoptimesFile = new File("./data/stop_times.txt");
+        File tripsFile = new File("./data/trips.txt");
+        File routesFile = new File("./data/routes.txt");
 
         String content;
         Scanner scan;
 
         // Reading stops.txt
         scan = new Scanner(stopsFile);
-        content = "";
         scan.nextLine();
         while(scan.hasNextLine()){
             content = scan.nextLine();
@@ -75,7 +67,6 @@ public class Main {
 
         // Reading routes.txt
         scan = new Scanner(routesFile);
-        content = "";
         scan.nextLine();
         while(scan.hasNextLine()){
             content = scan.nextLine();
@@ -87,7 +78,6 @@ public class Main {
 
         // Reading trips.txt
         scan = new Scanner(tripsFile);
-        content = "";
         scan.nextLine();
         while(scan.hasNextLine()){
             content = scan.nextLine();
@@ -101,7 +91,6 @@ public class Main {
 
         // Reading stop_times.txt
         scan = new Scanner(stoptimesFile);
-        content = "";
         scan.nextLine();
         while(scan.hasNextLine()){
             content = scan.nextLine();
@@ -109,21 +98,18 @@ public class Main {
             String sequence = params.get(4);
 
             String tripID = params.get(0);
-            String id = tripID + sequence;
 
             Trip trip = trips.get(tripID);
 
             int stopID = Integer.parseInt(params.get(3));
             Stop stop = stops.get(stopID);
 
-            DateFormat format = new SimpleDateFormat("HH:mm:ss");
-
             StopTime newStopTime = new StopTime(trip, LocalTime.parse(params.get(1)), LocalTime.parse(params.get(2)), stop, sequence);
             stopTimes.add(newStopTime);
         }
 
         // Sorts times from earliest to latest
-        Collections.sort(stopTimes, new Comparator<StopTime>() {
+        stopTimes.sort(new Comparator<>() {
             @Override
             public int compare(StopTime st1, StopTime st2) {
                 return st1.arrivalTime.compareTo(st2.arrivalTime);
@@ -133,7 +119,7 @@ public class Main {
     }
 
     // Takes in a stop_id, a maximum number of buses, a maximum amount of time in hours to show and checks if timings should be made relative or absolute.
-    // Optionally can force a time. Only the first String is read.
+    // Optionally can force a time. Only the first String provided is read. Must be in "HH:mm:ss" format.
     public static void showStops(int stopID, int maxBuses, int maxTimeInHrs, boolean isRelative, String forcedTime){
         LocalTime now = LocalTime.parse(forcedTime);
         LocalTime maxTime = now.plusHours(maxTimeInHrs);
@@ -148,12 +134,13 @@ public class Main {
         stopsOutput(stopID, maxBuses, isRelative, now, maxTime);
     }
 
+    // Processes the relevant data and outputs it.
     public static void stopsOutput(int stopID, int maxBuses, boolean isRelative, LocalTime now, LocalTime maxTime){
 
         // Local class for formatting the output
         class StopOutput{
-            String route;
-            List<String> times;
+            final String route;
+            final List<String> times;
             int offset = 0;
 
             StopOutput(String route){
@@ -171,7 +158,7 @@ public class Main {
             }
         }
 
-        HashMap<String, StopOutput> relevantTimes = new HashMap<String, StopOutput>();
+        HashMap<String, StopOutput> relevantTimes = new HashMap<>();
 
         Stop stop = stops.get(stopID);
         for(StopTime stopTime : stopTimes){
@@ -196,7 +183,7 @@ public class Main {
 
                     if(isRelative){
                         long recalculation = Duration.between(LocalTime.parse("00:00:00"), time).toMinutes() +  (1440 + Duration.between(now, LocalTime.parse("00:00:00")).toMinutes() );
-                        timeStr = recalculation + "m";
+                        timeStr = recalculation + "min";
                     }
                     relevantStop.addTimeToEnd(timeStr);
                     maxBuses--;
@@ -208,13 +195,13 @@ public class Main {
                     }
                     relevantStop = relevantTimes.get(route);
                     if(isRelative){
-                        timeStr = Duration.between(time, now).negated().toMinutes() + "m";
+                        timeStr = Duration.between(time, now).negated().toMinutes() + "min";
                     }
                     relevantStop.addTimeToStart(timeStr);
                     maxBuses--;
                 }
             }
-            else if(stopTime.stop == stop && maxBuses > 0){
+            else if(stopTime.stop == stop && maxBuses > 0 && maxTime.isAfter(now)){
                 // Case if hours do not pass midnight is the intersection of maxTime and now.
                 if(time.isBefore(maxTime) && time.isAfter(now))
                 {
@@ -226,7 +213,7 @@ public class Main {
                     relevantStop = relevantTimes.get(route);
 
                     if(isRelative){
-                        timeStr = Duration.between(time, now).negated().toMinutes() + "m";
+                        timeStr = Duration.between(time, now).negated().toMinutes() + "min";
                     }
                     relevantStop.addTimeToEnd(timeStr);
                     maxBuses--;
