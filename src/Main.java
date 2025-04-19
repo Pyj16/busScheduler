@@ -27,7 +27,7 @@ public class Main {
                 case "relative", "r" -> true;
                 case "absolute", "a" -> false;
                 default ->
-                        throw new Exception("Unknown representation format '" + args[2] + "'. Please use 'relative' or 'absolute'.");
+                        throw new Exception("Unknown representation format '" + args[2] + "'. Defaulting to absolute.");
             }; // Relative or absolute timing representation. 1 = relative 0 = absolute
         }
         catch(Exception e){
